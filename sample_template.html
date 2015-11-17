@@ -1,0 +1,41 @@
+<script src="https://js.braintreegateway.com/v2/braintree.js"></script>
+
+{exp:store:checkout
+    form_class="form-horizontal"
+    return="store_example/order/ORDER_HASH"
+    payment_method="Braintree"
+    error_handling="inline"
+    error_delimiters='<span class="help-inline">|</span>'}
+
+    {if no_items}
+        {redirect="store_example/checkout"}
+    {/if}
+
+    <fieldset>
+        <legend>Payment</legend>
+
+        {if error:payment_method}
+        <div class="control-group">
+            <div class="alert alert-error">{error:payment_method}</div>
+        </div>
+        {/if}
+
+        <div class="control-group" id="braintree_payment"></div>
+        <input type="hidden" name="submit_order" value="yes">
+
+        <script>
+            braintree.setup(
+            "{exp:store_braintree:token}",
+            "dropin", {
+                container: "braintree_payment"
+            });
+        </script>
+
+    </fieldset>
+
+    <div class="form-actions">
+        <a href="{path='store_example/checkout2'}" class="btn">Back</a>
+        <input type="submit" name="submit" value="Place Order" class="btn btn-success" />
+    </div>
+
+{/exp:store:checkout}
